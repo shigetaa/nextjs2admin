@@ -50,7 +50,7 @@ cd ../
 ```bash
 mkdir server && cd server
 npm init -y
-npm install -D typescript @types/node ts-node
+npm install -D typescript @types/node ts-node nodemon
 npx tsc --init
 npm install express
 npm install -D @types/express
@@ -70,3 +70,104 @@ npm install -D @types/express
 | /api/products/put     | PUT      | 商品情報更新     |                                |
 | /api/products/delete  | DELETE   | 商品情報削除     |                                |
 
+### http サーバーを作成する
+```bash
+mkdir routes
+```
+```bash
+vi routes/index.ts
+```
+```typescript
+import { Request, Response, Router } from "express"
+
+const router: Router = Router()
+
+router.get('/', (req: Request, res: Response) => {
+	res.send('Index Page')
+});
+
+export default router
+```
+```bash
+vi server.ts
+```
+```ts
+import Express from "express"
+import http from 'http'
+import indexRouter from './routes/index'
+
+const app = Express()
+const httpServer = http.createServer(app)
+const PORT = process.env.PORT || 5000
+
+app.use(Express.json())
+app.get('/', indexRouter)
+
+httpServer.listen(PORT, () => {
+	console.log(`Server listening on port ${PORT}`)
+})
+```
+開発用httpサーバー起動コマンドを登録
+`package.json`に`"dev": "npx nodemon server.ts"`を追記する。
+```bash
+vi package.json
+```
+```json
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx nodemon server.ts",
+	"start": "ts-node server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/node": "^18.7.17",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
+```
+```bash
+npm run dev
+```
+無事に起動すると以下の様にコンソールに表示されます。
+```bash
+Server listening on port 5000
+```
+
+## フロントエンドの制作
+
+### コンポーネント作成(Atomic Design)
+Atomic Design について
+詳しくは、こちらを見てください。
+https://www.codegrid.net/articles/2017-atomic-design-1/
+
+サンプルでは、CSSユーティリティの `tailwindcss` を用いて画面デザインを作成します。
+
+#### 作成一覧
+| レベル    | 名前            | 説明                               |
+| :-------- | :-------------- | :--------------------------------- |
+| Atoms     | Button          |                                    |
+| Atoms     | Link            |                                    |
+| Atoms     | Typography      |                                    |
+| Atoms     | FormLabel       | 入力フォームらべる                 |
+| Molecules | Pager           | 検索一覧のページネーション         |
+| Molecules | TabHeader       | 検索テーブルのヘッダ               |
+| Organisms | Dashboard       | トップページのダッシュボードエリア |
+| Organisms | SearchableTable | 再検索可能なテーブル               |
+| Templates | Confirm         | 確認ダイアログテンプレート         |
+| Templates | DashboardLayout | 管理画面レイアウト                 |
+| Page      | IndexPage       | トップページ                       |
+| Page      | LoginPage       | ログインページ                     |
+| Page      | PasswordDialog  | パスワード変更ダイアログ           |
