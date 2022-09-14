@@ -147,15 +147,42 @@ Server listening on port 5000
 ```
 
 ## フロントエンドの制作
-
+```bash
+cd ../client
+npm install lodash @types/lodash
+```
+```bash
+npm install react-query axios
+```
+```bash
+npm install react-toastify react-hook-form nookies
+```
 ### コンポーネント作成(Atomic Design)
 Atomic Design について
 詳しくは、こちらを見てください。
 https://www.codegrid.net/articles/2017-atomic-design-1/
 
-サンプルでは、CSSユーティリティの `tailwindcss` を用いて画面デザインを作成します。
+各コンポーネントのディレクトリを作成します。
+```bash
+mkdir -p components/atoms
+mkdir -p components/molecules
+mkdir -p components/organisms
+mkdir -p components/templates
+mkdir -p components/pages
+```
+
+#### Atomic Design 役割
+| グループ名 | 組合せ可 | 関わる人 | 担保するもの         | 特徴                                                                                                            |
+| :--------- | :------- | :------- | :------------------- | :-------------------------------------------------------------------------------------------------------------- |
+| atoms      | x        | dev      | 基本デザイン         | ・UIパーツの最小構成部品<br>・他のコンポーネントには依存しない<br>・配置パターンもatomsに含まれる               |
+| molecules  | o        | dev      | 操作性               | ・atomsを組み合わせて作る部品<br>・atomsの原始的行動に意味を付加する<br>・eg.文字を入れる+クリックする=検索する |
+| organisms  | o        | dev      | 機能、価値、サービス | ・atoms,molecules,organismsを組み合わせて作る部品<br>・独立して機能し、他のページでも同じ意図で使える           |
+| templates  | o        | dev+biz  | レイアウト           | ・atoms,molecules,organismsを配置する<br>・プレイスホルダーだけのスケルトンの状態                               |
+| pages      | o        | dev+biz  | 流し込むデータ       | ・templatesにデータを流し込みページを動かす                                                                     |
+
 
 #### 作成一覧
+サンプルでは、CSSユーティリティの `tailwindcss` を用いて画面デザインを作成します。
 | レベル    | 名前            | 説明                               |
 | :-------- | :-------------- | :--------------------------------- |
 | Atoms     | Button          |                                    |
@@ -168,6 +195,24 @@ https://www.codegrid.net/articles/2017-atomic-design-1/
 | Organisms | SearchableTable | 再検索可能なテーブル               |
 | Templates | Confirm         | 確認ダイアログテンプレート         |
 | Templates | DashboardLayout | 管理画面レイアウト                 |
-| Page      | IndexPage       | トップページ                       |
-| Page      | LoginPage       | ログインページ                     |
-| Page      | PasswordDialog  | パスワード変更ダイアログ           |
+| Pages     | IndexPage       | トップページ                       |
+| Pages     | LoginPage       | ログインページ                     |
+| Pages     | PasswordDialog  | パスワード変更ダイアログ           |
+
+#### Atoms （原子）
+##### Button コンポーネント作成
+`Material-UI`などのUIコンポーネントのAPI仕様を参考にコンポーネントの仕様を決めていきます。ボタンカラー、サイズ、追加class、disabledなどを指定できるようにしています。
+```bash
+vi components/atoms/button.tst
+```
+```tsx
+
+```
+
+#### Molecules （分子）
+
+#### Organisms （有機体）
+
+#### Templates （テンプレート）
+
+#### Page （ページ）
